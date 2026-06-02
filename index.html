@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="stopwatch">
+
+    <div class="mode-buttons">
+  <button class="mode-btn  stopwatch-button active">⏱️ Stopwatch</button>
+     <button class="mode-btn timer-button ">⏳Timer</button>
+    </div>   
+
+    <div class="setTime" id="timer">
+      
+        <span  class="countdown timer_minutes">00</span>
+        :
+        <span class="countdown timer_seconds">00</span>
+        :
+    <span class="countdown timer_milliseconds">000</span>
+ 
+</div>
+      <div class="timer-controls">
+      <button class="start">Start</button>
+      <button class="stop">Stop</button>
+      <button class="reset">Reset</button>
+      </div>
+      <div>
+<button id="mute" class="btn volume-button active">
+  <i id="icon" class="fas fa-volume-up"></i>
+</button> 
+
+        <button class="btn max-btn">
+          <i class="fa-solid fa-maximize"></i>
+        </button>
+      
+      </div>  
+      </div>
+    </div>
+    
+    <script src="app.js" defer></script>
+    <script src="https://kit.fontawesome.com/12d61aa281.js" crossorigin="anonymous"></script>
+  </body>
+</html>
