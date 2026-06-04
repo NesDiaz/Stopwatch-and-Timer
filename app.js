@@ -15,7 +15,7 @@ let countdownHours = "00";
 let countdownMinutes = "00";
 let countdownSeconds = "00";
 
-let isMuted = true;
+let isMuted = false;
 
 let stopwatchRunning = false;
 let timerRunning = false;
@@ -23,6 +23,7 @@ let timerRunning = false;
 const volumeButton = document.querySelector(".volume-button");
 const icon = document.querySelector("#icon");
 const mute = document.querySelector("#mute");
+const alarmSound = new Audio("./alarm.mp3");
 const maximizeButton = document.querySelector(".max-btn");
 
 const displayHours = document.querySelector(".timer_minutes");
@@ -56,8 +57,8 @@ timerButton.addEventListener("click", function () {
   currentMode = "timer";
 
   displayHours.contentEditable = true;
-displayMinutes.contentEditable = true;
-displaySeconds.contentEditable = true;
+  displayMinutes.contentEditable = true;
+  displaySeconds.contentEditable = true;
 
   renderTimer();
 });
@@ -82,10 +83,7 @@ function validateTimerInput(event) {
   }
 
   // Seconds cannot exceed 59
-  if (
-    event.target === displayMinutes ||
-    event.target === displaySeconds
-  ) {
+  if (event.target === displayMinutes || event.target === displaySeconds) {
     let num = parseInt(value) || 0;
 
     if (num > 59) {
@@ -108,7 +106,6 @@ function renderTimer() {
   displaySeconds.innerHTML = countdownSeconds;
 }
 
-
 stopwatchButton.addEventListener("click", function () {
   currentMode = "stopwatch";
   renderStopwatch();
@@ -125,11 +122,11 @@ timerDisplay.addEventListener("blur", function () {
 
   const parts = timeText.split(":");
 
-const hours = parseInt(parts[0]) || 0;
-const minutes = parseInt(parts[1]) || 0;
-const seconds = parseInt(parts[2]) || 0;
+  const hours = parseInt(parts[0]) || 0;
+  const minutes = parseInt(parts[1]) || 0;
+  const seconds = parseInt(parts[2]) || 0;
 
-totalTime = hours * 3600 + minutes * 60 + seconds;
+  totalTime = hours * 3600 + minutes * 60 + seconds;
 });
 
 startButton.addEventListener("click", function () {
@@ -182,9 +179,7 @@ stopButton.addEventListener("click", function () {
 });
 
 resetButton.addEventListener("click", function () {
-
   if (currentMode === "stopwatch") {
-
     cancelAnimationFrame(cancelId);
 
     savedTime = 0;
@@ -196,9 +191,7 @@ resetButton.addEventListener("click", function () {
     stopwatchRunning = false;
 
     renderStopwatch();
-
   } else if (currentMode === "timer") {
-
     clearInterval(countdownInterval);
 
     totalTime = 0;
@@ -215,7 +208,6 @@ resetButton.addEventListener("click", function () {
 
     renderTimer();
   }
-
 });
 
 function updateTimer() {
@@ -254,9 +246,9 @@ function updateCountdown() {
   minutes = minutes.toString().padStart(2, "0");
   seconds = seconds.toString().padStart(2, "0");
 
-countdownHours = hours;
-countdownMinutes = minutes;
-countdownSeconds = seconds;
+  countdownHours = hours;
+  countdownMinutes = minutes;
+  countdownSeconds = seconds;
 
   if (currentMode === "timer") {
     renderTimer();
@@ -266,31 +258,38 @@ countdownSeconds = seconds;
 
   if (totalTime < 0) {
     clearInterval(countdownInterval);
+
     timerRunning = false;
 
-countdownHours = "00";
-countdownMinutes = "00";
-countdownSeconds = "00";
+    countdownHours = "00";
+    countdownMinutes = "00";
+    countdownSeconds = "00";
 
-renderTimer();
+    renderTimer();
 
-alert("Time is up!");
+    if (!isMuted) {
+      alarmSound.play();
+    }
+
+    alert("Time is up!");
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 
     renderTimer();
   }
 }
 
 mute.addEventListener("click", function () {
-  if (isMuted) {
+  if (!isMuted) {
     volumeButton.classList.remove("active");
     icon.classList.remove("fa-volume-up");
     icon.classList.add("fa-volume-xmark");
-    isMuted = false;
+    isMuted = true;
   } else {
     volumeButton.classList.add("active");
     icon.classList.remove("fa-volume-xmark");
     icon.classList.add("fa-volume-up");
-    isMuted = true;
+    isMuted = false;
   }
 });
 
